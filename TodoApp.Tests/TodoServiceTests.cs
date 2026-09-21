@@ -18,6 +18,32 @@ public class TodoServiceTests
     }
 
     [Fact]
+    public void DeveGerarIdsSequenciaisAoAdicionarTarefas()
+    {
+        var service = new TodoService();
+
+        var primeira = service.Adicionar("Primeira tarefa");
+        var segunda = service.Adicionar("Segunda tarefa");
+
+        Assert.Equal(1, primeira.Id);
+        Assert.Equal(2, segunda.Id);
+    }
+
+    [Fact]
+    public void DeveListarAsTarefasAdicionadas()
+    {
+        var service = new TodoService();
+        service.Adicionar("Estudar GitHub Actions");
+        service.Adicionar("Criar Pull Request");
+
+        var tarefas = service.Listar();
+
+        Assert.Equal(2, tarefas.Count);
+        Assert.Equal("Estudar GitHub Actions", tarefas[0].Descricao);
+        Assert.Equal("Criar Pull Request", tarefas[1].Descricao);
+    }
+
+    [Fact]
     public void DeveConcluirUmaTarefa()
     {
         var service = new TodoService();
@@ -30,6 +56,16 @@ public class TodoServiceTests
     }
 
     [Fact]
+    public void DeveRetornarFalseAoConcluirTarefaInexistente()
+    {
+        var service = new TodoService();
+
+        var resultado = service.Concluir(999);
+
+        Assert.False(resultado);
+    }
+
+    [Fact]
     public void DeveRemoverUmaTarefa()
     {
         var service = new TodoService();
@@ -39,5 +75,15 @@ public class TodoServiceTests
 
         Assert.True(resultado);
         Assert.Empty(service.Listar());
+    }
+
+    [Fact]
+    public void DeveRetornarFalseAoRemoverTarefaInexistente()
+    {
+        var service = new TodoService();
+
+        var resultado = service.Remover(999);
+
+        Assert.False(resultado);
     }
 }
